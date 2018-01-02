@@ -1,9 +1,9 @@
-FROM fedora:24
+FROM fedora:26
 LABEL maintainer="Jeff Geerling"
 ENV container=docker
 
 # Update and enable systemd.
-RUN dnf -y update && dnf -y install systemd && dnf clean all && \
+RUN dnf -y update && dnf clean all && \
 (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
@@ -14,7 +14,7 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install Ansible and other requirements.
-RUN dnf makecache fast \
+RUN dnf makecache \
  && dnf -y install \
       ansible \
       sudo \
